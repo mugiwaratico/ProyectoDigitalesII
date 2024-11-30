@@ -22,8 +22,6 @@ reg Bandera_TX1;
 
 parameter Preparacion_Datos = 1, Inicio_Transmision = 2, Transmision = 3, Parada = 4, Espera = 5;
 
-// Hacer commit 1
-
 always @(posedge UART2_CLK) begin //or negedge TX_1
     // Logica Receptor
     if (Bandera_TX1 == 0) begin
