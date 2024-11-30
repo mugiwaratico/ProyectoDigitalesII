@@ -45,9 +45,7 @@ always @(posedge UART2_CLK) begin //or negedge TX_1
             Contador_Packet_In <= 4'd11;
         end
     end
-    //Hacer commit 2
-
-
+  
     // Logica Transmisor
     if(IDLE_UART2) begin
         TX_Serial2 <= 1;
@@ -94,7 +92,7 @@ always @(posedge UART2_CLK) begin //or negedge TX_1
             end
         endcase
 
-        // Hacer commit 3
+    
     end
 
 end
