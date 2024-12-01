@@ -29,7 +29,7 @@ module UART_System (
         .TX_Serial1(tx_uart1_to_rx_uart2)   // TX de UART_1 conectado al RX de UART_2
     );
 
- // Instancia del módulo UART_2
+    // Instancia del módulo UART_2
     UART_2 uart2 (
         .UART2_CLK(clk),
         .IDLE_UART2(idle_uart2),
