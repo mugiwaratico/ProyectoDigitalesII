@@ -28,3 +28,22 @@ module UART_System (
         .RX_Serial1(tx_uart2_to_rx_uart1),
         .TX_Serial1(tx_uart1_to_rx_uart2)   // TX de UART_1 conectado al RX de UART_2
     );
+
+ // Instancia del módulo UART_2
+    UART_2 uart2 (
+        .UART2_CLK(clk),
+        .IDLE_UART2(idle_uart2),
+        .data_in2(data_uart2),
+        .Packet_In2(Packet_In2_dut),  // RX de UART_2 conectado al TX de UART_1
+        .TX_1(tx_uart1_to_rx_uart2),
+        .RX_Serial2(tx_uart1_to_rx_uart2),
+        .TX_Serial2(tx_uart2_to_rx_uart1)
+    );
+    
+  // Asignaciones de salida para monitoreo en el testbench
+    assign tx_serial1 = tx_uart1_to_rx_uart2;
+    assign tx_serial2 = tx_uart2_to_rx_uart1;
+    assign rx_serial1 = Packet_In1_dut;
+    assign rx_serial2 = Packet_In2_dut;
+
+endmodule
