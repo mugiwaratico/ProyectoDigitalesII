@@ -1,3 +1,33 @@
+module UART_1 (
+    input UART1_CLK,
+    input IDLE_UART1,
+    input [7:0] data_in1,
+    input RX_Serial1,
+    input TX_2,
+    output reg [10:0] Packet_In1,
+    output reg TX_Serial1
+
+);
+
+reg [3:0] Contador_Packet_Out;
+reg [7:0] Data_Temporal;
+reg [2:0] state;
+reg [3:0] Contador_Unos;
+reg [3:0] Contador_Ciclos;
+reg [3:0] Contador_Packet_In;
+reg [3:0] Contador_Data;
+reg Bandera_TX2;
+
+parameter Preparacion_Datos = 1, Inicio_Transmision = 2, Transmision = 3, Parada = 4, Espera = 5;
+
+
+endmodule
+
+
+
+
+
+
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Logica UART2
 
