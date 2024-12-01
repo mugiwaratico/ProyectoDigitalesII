@@ -65,7 +65,7 @@ always @(posedge UART2_CLK) begin //or negedge TX_1
                 if(Contador_Packet_Out < 8) begin
                     TX_Serial2 <= data_in2[Contador_Packet_Out];
                     Contador_Packet_Out <= Contador_Packet_Out + 1;
-                    if(TX_Serial2) Contador_Unos = Contador_Unos + 1;
+                    if(data_in2[Contador_Packet_Out]) Contador_Unos <= Contador_Unos + 1;
                 end else begin
                     if (Contador_Unos % 2 == 0) begin
                         TX_Serial2 <= 0;
