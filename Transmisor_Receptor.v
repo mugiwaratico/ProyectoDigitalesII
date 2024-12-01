@@ -20,7 +20,7 @@ reg Bandera_TX2;
 
 parameter Preparacion_Datos = 1, Inicio_Transmision = 2, Transmision = 3, Parada = 4, Espera = 5;
 
-always @(posedge UART1_CLK) begin 
+always @(posedge UART1_CLK) begin //or negedge TX_1
     // Logica Receptor
     if (Bandera_TX2 == 0) begin
         Contador_Packet_In <= 4'd11;
@@ -41,15 +41,55 @@ always @(posedge UART1_CLK) begin
             Contador_Packet_In <= 4'd11;
         end
     end
+    // Logica Transmisor
+    if(IDLE_UART1) begin
+        TX_Serial1 <= 1;
+        Contador_Ciclos <= 0;
+        Contador_Packet_Out <= 0;
+        Contador_Unos <= 0;
+        state <= Preparacion_Datos;
+    end else begin
+        case (state)
+            Preparacion_Datos : begin
+                Data_Temporal <= data_in1;
+                state <= Inicio_Transmision;
+            end
+            Inicio_Transmision : begin
+                TX_Serial1 <= 0;
+                state <= Transmision;
+            end
+            Transmision : begin
+                if(Contador_Packet_Out < 8) begin
+                    TX_Serial1 <= data_in1[Contador_Packet_Out];
+                    Contador_Packet_Out <= Contador_Packet_Out + 1;
+                    if(data_in1[Contador_Packet_Out]) Contador_Unos = Contador_Unos + 1;
+                end else begin
+                    if (Contador_Unos % 2 == 0) begin
+                        TX_Serial1 <= 0;
+                    end else begin
+                        TX_Serial1 <= 1;
+                    end
+                    state <= Parada;
+                end
+            end
+            Parada : begin
+                TX_Serial1 <= 1;
+                state <= Espera; 
+            end
+            Espera : begin
+                if(Contador_Ciclos < 500) begin
+                    if(Data_Temporal != data_in1) begin
+                        state <= Preparacion_Datos;
+                        Packet_In1 <= 0;
+                        Bandera_TX2 <= 1;
+                    end 
+                    Contador_Ciclos <= Contador_Ciclos + 1;
+                end
+            end
+        endcase
+    end
 end
-
-
-
 endmodule
-
-
-
-
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -76,7 +116,7 @@ reg Bandera_TX1;
 
 parameter Preparacion_Datos = 1, Inicio_Transmision = 2, Transmision = 3, Parada = 4, Espera = 5;
 
-always @(posedge UART2_CLK) begin //or negedge TX_1
+always @(posedge UART2_CLK) begin 
     // Logica Receptor
     if (Bandera_TX1 == 0) begin
         Contador_Packet_In <= 4'd11;
